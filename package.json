@@ -1,0 +1,9 @@
+{
+  "name": "timetracking",
+  "version": "1.0.0",
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "gulp": "^3.8.11",
+    "vinyl-source-stream": "^1.0.0"
+  }
+}
