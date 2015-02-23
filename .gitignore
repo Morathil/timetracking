@@ -13,3 +13,5 @@ platforms/android/.settings/org.eclipse.jdt.core.prefs
 platforms/android/lint.xml
 
 www/
+node_modules/
+hooks/
