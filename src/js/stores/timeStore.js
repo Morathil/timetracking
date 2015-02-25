@@ -1,13 +1,28 @@
 "use strict";
 
-var LocalStorageUtils = require("./../utils/localStorageUtils");
+var LocalStorageUtils = require("./../utils/LocalStorageUtils");
+var Dispatcher = require("./../dispatcher/Dispatcher");
 
 var TimeStore = function() {}
 
 var publicMethods = function() {
+	this.emitChange = function() {
+		this.trigger("change");
+	};
+
 	this.track = function() {	
-		this._updateWorkingTime();
-		this._triggerChange();
+		var now = new Date().getTime();
+		var workingTime = LocalStorageUtils.get("workingTime") || {};
+
+		if (!this.getIsWorking()) {
+			workingTime.lastEntryAt = now;	
+			workingTime.entries = workingTime.entries || {};
+			workingTime.entries[now] = {startTime: now};
+		} else {
+			workingTime.entries[workingTime.lastEntryAt].endTime = now;
+		}
+
+		LocalStorageUtils.set("workingTime", workingTime);
 	};
 
 	this.getIsWorking = function() {
@@ -22,29 +37,21 @@ var publicMethods = function() {
 	};
 }
 
-var privateMethods = function() {
-	this._triggerChange = function() {
-		this.trigger("change");
-	};
-
-	this._updateWorkingTime = function() {
-		var now = new Date().getTime();
-		var workingTime = LocalStorageUtils.get("workingTime") || {};
-
-		if (!this.getIsWorking()) {
-			workingTime.lastEntryAt = now;	
-			workingTime.entries = workingTime.entries || {};
-			workingTime.entries[now] = {startTime: now};
-		} else {
-			workingTime.entries[workingTime.lastEntryAt].endTime = now;
-		}
-
-		LocalStorageUtils.set("workingTime", workingTime);
-	};
-}
+var privateMethods = function() {}
 
 privateMethods.call(TimeStore.prototype);
 publicMethods.call(TimeStore.prototype);
 asEvented.call(TimeStore.prototype);
 
-module.exports = new TimeStore();
+var TimeStore = new TimeStore();
+
+Dispatcher.register(function(action) {
+  switch(action.type) {
+    case "trackTime":
+    	TimeStore.track();
+      TimeStore.emitChange();
+      break;
+  }
+});
+
+module.exports = TimeStore;
