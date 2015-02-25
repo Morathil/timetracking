@@ -1,7 +1,7 @@
 "use strict"
 
-var Header = require("./header.jsx");
-var TrackingArea = require("./tracking_area/trackingArea.jsx")
+var Header = require("./Header.jsx");
+var TrackingArea = require("./content/Content.jsx")
 
 var TimeTracking = React.createClass({
   render: function() {

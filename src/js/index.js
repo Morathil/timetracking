@@ -1,5 +1,4 @@
-var TimeTracking = require("./views/timetracking.jsx");
-
+var TimeTracking = require("./views/TimeTracking.jsx");
 
 React.render(
         <TimeTracking />,

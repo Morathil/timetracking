@@ -1,8 +1,8 @@
 "use strict"
 
-var Button = require("./../components/button.jsx");
-var TimeStore = require("./../../stores/timeStore");
-var TimeActionCreator = require("./../../actions/timeActionCreator");
+var Button = require("./../components/Button.jsx");
+var TimeStore = require("./../../stores/TimeStore");
+var TimeActions = require("./../../actions/TimeActions");
 
 var TrackingArea = React.createClass({
 	getInitialState: function() {
@@ -36,7 +36,7 @@ var TrackingArea = React.createClass({
   },
 
   _trackTime: function() {
-		TimeActionCreator.trackTime();
+		TimeActions.trackTime();
   }
 });
 
