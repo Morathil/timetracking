@@ -6,12 +6,6 @@ var TimeActions = require("./../../actions/TimeActions");
 
 var React = require("react");
 
-var mui = require('material-ui');
-
-var LeftNav = mui.LeftNav;
-var MenuItem = mui.MenuItem;
-
-
 var TrackingArea = React.createClass({
 	getInitialState: function() {
 		return {
@@ -24,31 +18,11 @@ var TrackingArea = React.createClass({
 	},
 
   render: function() {
-    var text = "Start";
-    var type = "secondary";
-
-  	if (this.state.isWorking) {
-      text = "Stop";
-      type = "primary";
-    }
-
-    var menuItems = [
-      { route: 'get-started', text: 'Get Started' },
-      { route: 'css-framework', text: 'CSS Framework' },
-      { route: 'components', text: 'Components' },
-      { type: MenuItem.Types.SUBHEADER, text: 'Resources' },
-      { 
-         type: MenuItem.Types.LINK, 
-         payload: 'https://github.com/callemall/material-ui', 
-         text: 'GitHub' 
-      },
-    ];
+    var text = this.state.isWorking ? "Start" : "Stop";
+    var type = this.state.isWorking ? "secondary" : "primary";
 
     return (
-      <div className="trackingarea">
-        <LeftNav ref="leftNav" docked={false} menuItems={menuItems} />
-        <Button label={text} clickEvent={this._trackTime} type={type} />
-      </div>
+      <Button label={text} clickEvent={this._trackTime} type={type} />
     );
   },
 
