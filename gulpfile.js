@@ -3,12 +3,22 @@ var plugins = require("gulp-load-plugins")();
 var browserify = require("browserify");
 var source = require("vinyl-source-stream");
 var reactify = require("reactify");
-
+var less = require('gulp-less');
+var path = require('path');
+ 
 var paths = {
 	scripts: ["src/js/**/*"],
 	vendor: ["src/vendor/**/*"],
 	statics: ["src/*.html", "src/img/**/*", "src/css/**/*"]
 };
+
+gulp.task('less', function () {
+  gulp.src('src/less/**/*.less')
+    .pipe(less({
+      paths: [ path.join(__dirname, 'less', 'includes') ]
+    }))
+    .pipe(gulp.dest('www/css'));
+});
 
 gulp.task("vendor", function() {
 	gulp.src(paths.vendor)
@@ -30,8 +40,8 @@ gulp.task("browserify", function() {
 	.pipe(gulp.dest("www/js"))
 });
 
-gulp.task("default", ["vendor", "statics", "browserify"], function() {
-	gulp.watch(paths.scripts, ["browserify"]);
-	gulp.watch(paths.vendor, ["vendor", "browserify"]);
-	gulp.watch(paths.statics, ["statics", "browserify"]);
+gulp.task("default", ["less", "vendor", "statics", "browserify"], function() {
+	gulp.watch(paths.scripts, ["less", "vendor", "statics", "browserify"]);
+	gulp.watch(paths.vendor, ["less", "vendor", "statics", "browserify"]);
+	gulp.watch(paths.statics, ["less", "vendor", "statics", "browserify"]);
 });
