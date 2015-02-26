@@ -32,12 +32,18 @@ gulp.task("statics", function(){
 });
 
 gulp.task("browserify", function() {
-	browserify()
-	.add("./src/js/index.js")
-	.transform(reactify)
-	.bundle()
-	.pipe(source("index.js"))
-	.pipe(gulp.dest("www/js"))
+	var bundleStream = browserify()
+		.add("./src/js/index.js")
+		.transform(reactify)
+		.bundle();
+
+	bundleStream.on("error", function(error) {
+		plugins.util.log(plugins.util.colors.red(error));
+		this.end();
+	});
+
+	bundleStream.pipe(source("index.js"))
+		.pipe(gulp.dest("www/js"));
 });
 
 gulp.task("default", ["less", "vendor", "statics", "browserify"], function() {
