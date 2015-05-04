@@ -1,9 +1,6 @@
 "use strict"
 
 var React = require("react");
-var mui = require('material-ui');
-
-var RaisedButton = mui.RaisedButton;
 
 var Button = React.createClass({
 	propTypes: {
@@ -17,13 +14,13 @@ var Button = React.createClass({
 
     switch (this.props.type) {
       case "primary":
-        button = <RaisedButton label={this.props.label} onClick={this.props.clickEvent} primary={true} />
+        button = <div className={"waves-effect waves-light btn-large"} onClick={this.props.clickEvent}> {this.props.label} </div>
         break;
       case "secondary":
-        button = <RaisedButton label={this.props.label} onClick={this.props.clickEvent} secondary={true} />
+        button = <div className={"waves-effect waves-light btn-large red"} onClick={this.props.clickEvent}> {this.props.label} </div>
         break;
       default:
-        button = <RaisedButton label={this.props.label} onClick={this.props.clickEvent} />
+        button = <div className={"waves-effect waves-light btn-large"} onClick={this.props.clickEvent}> {this.props.label} </div>
         break;
     }
 

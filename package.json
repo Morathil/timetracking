@@ -15,7 +15,6 @@
     "gulp-load-plugins": "^0.8.0",
     "gulp-util": "^3.0.4",
     "lodash.assign": "^3.0.0",
-    "material-ui": "^0.7.0",
     "react": "^0.12.2",
     "react-tools": "^0.12.2",
     "reactify": "^1.0.0",

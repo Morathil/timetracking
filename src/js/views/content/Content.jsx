@@ -1,6 +1,8 @@
 "use strict"
 
 var Button = require("./../components/Button.jsx");
+var List = require("./../components/List.jsx");
+
 var TimeStore = require("./../../stores/TimeStore");
 var TimeActions = require("./../../actions/TimeActions");
 
@@ -9,7 +11,8 @@ var React = require("react");
 var TrackingArea = React.createClass({
 	getInitialState: function() {
 		return {
-			isWorking: this._getIsWorking()
+			isWorking: this._getIsWorking(),
+      workingTimes: TimeStore.getWorkingTimes()
 		}
 	},
 
@@ -18,11 +21,14 @@ var TrackingArea = React.createClass({
 	},
 
   render: function() {
-    var text = this.state.isWorking ? "Start" : "Stop";
+    var text = this.state.isWorking ? "Stop" : "Start";
     var type = this.state.isWorking ? "secondary" : "primary";
 
     return (
-      <Button label={text} clickEvent={this._trackTime} type={type} />
+      <div>
+        <Button label={text} clickEvent={this._trackTime} type={type} />
+        <List listItems={this.state.workingTimes} />
+      </div>
     );
   },
 
@@ -36,7 +42,8 @@ var TrackingArea = React.createClass({
 
   _onTimeStoreChange: function() {
   	this.setState({
-  		isWorking: this._getIsWorking()
+  		isWorking: this._getIsWorking(),
+      workingTimes: TimeStore.getWorkingTimes()
   	});
   },
 

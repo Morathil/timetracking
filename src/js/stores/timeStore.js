@@ -6,35 +6,40 @@ var Dispatcher = require("./../dispatcher/Dispatcher");
 var TimeStore = function() {}
 
 var publicMethods = function() {
-	this.emitChange = function() {
-		this.trigger("change");
-	};
+  this.emitChange = function() {
+    this.trigger("change");
+  };
 
-	this.track = function() {	
-		var now = new Date().getTime();
-		var workingTime = LocalStorageUtils.get("workingTime") || {};
+  this.track = function() {
+    var now = new Date().getTime();
+    var workingTime = LocalStorageUtils.get("workingTime") || [];
 
-		if (!this.getIsWorking()) {
-			workingTime.lastEntryAt = now;	
-			workingTime.entries = workingTime.entries || {};
-			workingTime.entries[now] = {startTime: now};
-		} else {
-			workingTime.entries[workingTime.lastEntryAt].endTime = now;
-		}
+    if (!this.getIsWorking()) {
+      workingTime.push({
+        startTime: now
+      });
+    } else {
+      workingTime[workingTime.length - 1].endTime = now;
+    }
 
-		LocalStorageUtils.set("workingTime", workingTime);
-	};
+    LocalStorageUtils.set("workingTime", workingTime);
+  };
 
-	this.getIsWorking = function() {
-		var workingTime = LocalStorageUtils.get("workingTime")
-		if (!workingTime) {
-			return false;
-		}
+  this.getIsWorking = function() {
+    var workingTime = LocalStorageUtils.get("workingTime");
 
-		var latestEntry = workingTime.entries[workingTime.lastEntryAt];
-		
-		return latestEntry.startTime && !latestEntry.endTime;
-	};
+    if (!workingTime) {
+      return false;
+    }
+
+    var latestEntry = workingTime[workingTime.length - 1];
+
+    return latestEntry.startTime && !latestEntry.endTime;
+  };
+
+  this.getWorkingTimes = function() {
+    return LocalStorageUtils.get("workingTime").reverse();
+  };
 }
 
 var privateMethods = function() {}
@@ -46,9 +51,9 @@ asEvented.call(TimeStore.prototype);
 var TimeStore = new TimeStore();
 
 Dispatcher.register(function(action) {
-  switch(action.type) {
+  switch (action.type) {
     case "trackTime":
-    	TimeStore.track();
+      TimeStore.track();
       TimeStore.emitChange();
       break;
   }
