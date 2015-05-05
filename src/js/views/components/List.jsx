@@ -23,7 +23,7 @@ var List = React.createClass({
 
       for (var key in workingTime) {
         formattedTimes.push(workingTime[key]);
-      } /// moment(workingTime[key]).format("LT")
+      }
 
       content[weekNumber + year] = content[weekNumber + year] || [];
       content[weekNumber + year].push(
@@ -40,7 +40,9 @@ var List = React.createClass({
       tmp.push(<ul key={key} className={"collection"}>
         <li key={key} className={"collection-item active"}>{moment(content[key][0].formattedTimes[0]).startOf("week").format("MMMM Do YYYY")} - {moment(content[key][0].formattedTimes[0]).endOf("week").format("MMMM Do YYYY")}</li>
         {content[key].map(function(entry, index) {
-          return <li key={index + entry.formattedTimes[0]} className={"collection-item"}>{entry.day}: {entry.formattedTimes.map(function(x) {return moment(x).format("LT")}).join(" - ")}</li>;
+          var timeDiff = (entry.formattedTimes[0] && entry.formattedTimes[1]) ? " | " + moment(entry.formattedTimes[1] - entry.formattedTimes[0]).utcOffset(0).format("HH:mm")  : null;
+
+          return <li key={index + entry.formattedTimes[0]} className={"collection-item"}>{entry.day}: {entry.formattedTimes.map(function(x) {return moment(x).format("LT")}).join(" - ")} {timeDiff}</li>;
         })}
       </ul>);
     }

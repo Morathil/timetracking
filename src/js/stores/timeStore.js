@@ -12,7 +12,7 @@ var publicMethods = function() {
 
   this.track = function() {
     var now = new Date().getTime();
-    var workingTime = LocalStorageUtils.get("workingTime") || [];
+    var workingTime = LocalStorageUtils.get("workingTime");
 
     if (!this.getIsWorking()) {
       workingTime.push({
@@ -25,10 +25,22 @@ var publicMethods = function() {
     LocalStorageUtils.set("workingTime", workingTime);
   };
 
+  this.undo = function() {
+    var workingTime = LocalStorageUtils.get("workingTime");
+
+    if (workingTime.length > 0 && !this.getIsWorking()) {
+      delete workingTime[workingTime.length - 1].endTime;
+    } else {
+      workingTime.pop();
+    }
+
+    LocalStorageUtils.set("workingTime", workingTime);
+  };
+
   this.getIsWorking = function() {
     var workingTime = LocalStorageUtils.get("workingTime");
 
-    if (!workingTime) {
+    if (workingTime.length <= 0) {
       return false;
     }
 
@@ -38,7 +50,8 @@ var publicMethods = function() {
   };
 
   this.getWorkingTimes = function() {
-    return LocalStorageUtils.get("workingTime").reverse();
+    var workingTimes = LocalStorageUtils.get("workingTime");
+    return workingTimes.reverse();
   };
 }
 
@@ -54,6 +67,11 @@ Dispatcher.register(function(action) {
   switch (action.type) {
     case "trackTime":
       TimeStore.track();
+      TimeStore.emitChange();
+      break;
+
+    case "undo":
+      TimeStore.undo();
       TimeStore.emitChange();
       break;
   }

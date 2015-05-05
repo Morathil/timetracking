@@ -23,11 +23,30 @@ var TrackingArea = React.createClass({
   render: function() {
     var text = this.state.isWorking ? "Stop" : "Start";
     var type = this.state.isWorking ? "secondary" : "primary";
+    var label = <div>{text}</div>;
+    var undo = <i className="mdi-content-undo"></i>;
 
     return (
-      <div>
-        <Button label={text} clickEvent={this._trackTime} type={type} />
-        <List listItems={this.state.workingTimes} />
+      <div className={"section"}>
+        <div className={"row"}>
+          <div className="col s3 center-align">
+            <Button label={undo} clickEvent={this._undo} />
+          </div>        
+          <div className="col s5 center-align">
+            <Button label={label} clickEvent={this._trackTime} type={type} />
+          </div>
+          <div className="input-field col s2">
+            <input ref="hours" id="hours" type="number" className="validate" />
+            <label for="hours">Hours</label>
+          </div>
+          <div className="input-field col s2">
+            <input ref="minutes" id="minutes" type="number" className="validate" />
+            <label for="minutes">Minutes</label>
+          </div>          
+          <div className="col s12">
+            <List listItems={this.state.workingTimes} />
+          </div>
+        </div>
       </div>
     );
   },
@@ -48,7 +67,16 @@ var TrackingArea = React.createClass({
   },
 
   _trackTime: function() {
+    if (this.ref.minutes || this.ref.hours) {
+      // new date set hours, new date set minutes
+      // pass to trackTime
+    }
+
 		TimeActions.trackTime();
+  },
+
+  _undo: function() {
+    TimeActions.undo();
   }
 });
 

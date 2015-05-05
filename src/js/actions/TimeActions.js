@@ -12,11 +12,15 @@ var publicMethods = function() {
     Dispatcher.dispatch({
       type: "trackTime"
     });
+  },
+
+  this.undo = function() {
+    Dispatcher.dispatch({
+      type: "undo"
+    });
   }
 }
 
 publicMethods.call(TimeActions.prototype);
 
 module.exports = new TimeActions();
-
-

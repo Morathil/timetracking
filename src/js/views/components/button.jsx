@@ -5,8 +5,8 @@ var React = require("react");
 var Button = React.createClass({
 	propTypes: {
 		clickEvent: React.PropTypes.func.isRequired,
-    label: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired
+    label: React.PropTypes.node.isRequired,
+    type: React.PropTypes.string
 	},
 
   render: function() {
