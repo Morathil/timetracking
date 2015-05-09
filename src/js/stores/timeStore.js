@@ -10,8 +10,8 @@ var publicMethods = function() {
     this.trigger("change");
   };
 
-  this.track = function() {
-    var now = new Date().getTime();
+  this.track = function(date) {
+    var now = date || new Date().getTime();
     var workingTime = LocalStorageUtils.get("workingTime");
 
     if (!this.getIsWorking()) {
@@ -53,6 +53,10 @@ var publicMethods = function() {
     var workingTimes = LocalStorageUtils.get("workingTime");
     return workingTimes.reverse();
   };
+
+  this.setWorkingTimes = function(workingTimes) {
+    LocalStorageUtils.set("workingTime", workingTimes.reverse());
+  };
 }
 
 var privateMethods = function() {}
@@ -63,15 +67,20 @@ asEvented.call(TimeStore.prototype);
 
 var TimeStore = new TimeStore();
 
-Dispatcher.register(function(action) {
+TimeStore.dispatchToken = Dispatcher.register(function(action) {
   switch (action.type) {
     case "trackTime":
-      TimeStore.track();
+      TimeStore.track(action.data);
       TimeStore.emitChange();
       break;
 
     case "undo":
       TimeStore.undo();
+      TimeStore.emitChange();
+      break;
+
+    case "syncDownCompleted":
+      TimeStore.setWorkingTimes(action.data);
       TimeStore.emitChange();
       break;
   }

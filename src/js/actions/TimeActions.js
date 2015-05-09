@@ -8,9 +8,10 @@ var TimeActions = function() {
 }
 
 var publicMethods = function() {
-  this.trackTime = function() {
+  this.trackTime = function(data) {
     Dispatcher.dispatch({
-      type: "trackTime"
+      type: "trackTime",
+      data: data
     });
   },
 

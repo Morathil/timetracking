@@ -3,6 +3,8 @@
 var Button = require("./../components/Button.jsx");
 var List = require("./../components/List.jsx");
 
+var SyncStore = require("./../../stores/SyncStore");
+
 var TimeStore = require("./../../stores/TimeStore");
 var TimeActions = require("./../../actions/TimeActions");
 
@@ -12,39 +14,44 @@ var TrackingArea = React.createClass({
 	getInitialState: function() {
 		return {
 			isWorking: this._getIsWorking(),
-      workingTimes: TimeStore.getWorkingTimes()
+      workingTimes: TimeStore.getWorkingTimes(),
+      isSyncing: SyncStore.getIsSyncing()
 		}
 	},
 
 	componentWillMount: function() {
 		TimeStore.on("change", this._onTimeStoreChange);
+    SyncStore.on("change", this._onSyncStoreChange);
 	},
 
   render: function() {
-    var text = this.state.isWorking ? "Stop" : "Start";
+    var text = this.state.isWorking ? <i className="mdi-av-stop"></i> : <i className="mdi-av-play-arrow"></i>;
     var type = this.state.isWorking ? "secondary" : "primary";
     var label = <div>{text}</div>;
     var undo = <i className="mdi-content-undo"></i>;
-
+    var timePickerLabel = <i className="mdi-hardware-keyboard"></i>;
+    var css = "col s12 ";
+    var disabled = this.state.isSyncing ? true : false;
+    var syncingIndicator = this.state.isSyncing ? (<div className="progress">
+        <div className="indeterminate amber darken-1"></div>
+    </div>) : (<div className="progress">
+        <div className="determinate amber darken-1" style={{width: "100%"}}></div>
+    </div>);
     return (
       <div className={"section"}>
         <div className={"row"}>
-          <div className="col s3 center-align">
-            <Button label={undo} clickEvent={this._undo} />
-          </div>        
-          <div className="col s5 center-align">
-            <Button label={label} clickEvent={this._trackTime} type={type} />
+          {syncingIndicator}
+          <div className="col s6 left-align">
+            <Button label={label} clickEvent={this._trackTime} type={type} css={css} disabled={disabled} />
           </div>
-          <div className="input-field col s2">
-            <input ref="hours" id="hours" type="number" className="validate" />
-            <label for="hours">Hours</label>
+          <div className="col s6 right-align">
+            <Button label={timePickerLabel} clickEvent={this._pickTime} type={type} css={css} disabled={disabled} />
           </div>
-          <div className="input-field col s2">
-            <input ref="minutes" id="minutes" type="number" className="validate" />
-            <label for="minutes">Minutes</label>
-          </div>          
           <div className="col s12">
             <List listItems={this.state.workingTimes} />
+          </div>
+          <div className="col s12 right-align">
+            <Button label={undo} clickEvent={this._undo} />
           </div>
         </div>
       </div>
@@ -66,17 +73,30 @@ var TrackingArea = React.createClass({
   	});
   },
 
-  _trackTime: function() {
-    if (this.ref.minutes || this.ref.hours) {
-      // new date set hours, new date set minutes
-      // pass to trackTime
-    }
+  _onSyncStoreChange: function() {
+    this.setState({
+      isSyncing: SyncStore.getIsSyncing()
+    });
+  },
 
+  _trackTime: function() {
 		TimeActions.trackTime();
   },
 
   _undo: function() {
     TimeActions.undo();
+  },
+
+  _pickTime: function() {
+    var options = {
+      date: new Date(),
+      mode: 'time'
+    };
+
+    var that = this;
+    datePicker.show(options, function(date){
+      TimeActions.trackTime(date.getTime());
+    });
   }
 });
 
