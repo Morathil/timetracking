@@ -33,9 +33,9 @@ var TrackingArea = React.createClass({
     var css = "col s12 ";
     var disabled = this.state.isSyncing ? true : false;
     var syncingIndicator = this.state.isSyncing ? (<div className="progress">
-        <div className="indeterminate amber darken-1"></div>
+        <div className="indeterminate cyan lighten-1"></div>
     </div>) : (<div className="progress">
-        <div className="determinate amber darken-1" style={{width: "100%"}}></div>
+        <div className="determinate cyan lighten-1" style={{width: "100%"}}></div>
     </div>);
     return (
       <div className={"section"}>
@@ -47,6 +47,8 @@ var TrackingArea = React.createClass({
           <div className="col s6 right-align">
             <Button label={timePickerLabel} clickEvent={this._pickTime} type={type} css={css} disabled={disabled} />
           </div>
+        </div>
+        <div className={"row"}>
           <div className="col s12">
             <List listItems={this.state.workingTimes} />
           </div>

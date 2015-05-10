@@ -35,18 +35,21 @@ var List = React.createClass({
     }
 
     var tmp = [];
+    var noBorder = {
+      border: "0px"
+    };
 
     for (var key in content) {
-      tmp.push(<ul key={key} className={"collection"}>
-        <li key={key} className={"collection-item active cyan darken-4"}>
+      tmp.push(<ul key={key} className={"collection"} style={noBorder} >
+        <li key={key} style={noBorder} className={"collection-item active cyan darken-4"}>
           {moment(content[key][0].formattedTimes[0]).startOf("week").format("MMMM Do YYYY")} - {moment(content[key][0].formattedTimes[0]).endOf("week").format("MMMM Do YYYY")}
         </li>
         {content[key].map(function(entry, index) {
           var timeDiff = (entry.formattedTimes[0] && entry.formattedTimes[1]) ? " " + moment(entry.formattedTimes[1] - entry.formattedTimes[0]).utcOffset(0).format("HH:mm")  : null;
 
-          return <li key={index + entry.formattedTimes[0]} className={"collection-item avatar"}>
-            <a style={{"padding-top": "2px"}} className="btn-floating waves-effect waves-light circle center-align">{entry.day}</a>
-            <p className="flow-text">
+          return <li style={noBorder} key={index + entry.formattedTimes[0]} className={"collection-item avatar blue-grey darken-2"}>
+            <a style={{"padding-top": "3px", "padding-left": "3px"}} className="btn-floating waves-effect waves-light circle center-align">{entry.day}</a>
+            <p className="flow-text white-text">
               {entry.formattedTimes.map(function(x) {return moment(x).format("LT")}).join(" - ")}
             </p>
             <div className="secondary-content">
