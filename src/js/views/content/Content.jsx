@@ -32,28 +32,36 @@ var TrackingArea = React.createClass({
     var timePickerLabel = <i className="mdi-hardware-keyboard"></i>;
     var css = "col s12 ";
     var disabled = this.state.isSyncing ? true : false;
-    var syncingIndicator = this.state.isSyncing ? (<div className="progress">
+
+    var zeroMargin = {
+      marginTop: 0
+    };
+
+    var syncingIndicator = this.state.isSyncing ? (<div style={zeroMargin} className="progress">
         <div className="indeterminate cyan lighten-1"></div>
-    </div>) : (<div className="progress">
+    </div>) : (<div style={zeroMargin} className="progress">
         <div className="determinate cyan lighten-1" style={{width: "100%"}}></div>
     </div>);
+
     return (
-      <div className={"section"}>
-        <div className={"row"}>
-          {syncingIndicator}
-          <div className="col s6 left-align">
-            <Button label={label} clickEvent={this._trackTime} type={type} css={css} disabled={disabled} />
+      <div>
+        {syncingIndicator}
+        <div className={"section"}>
+          <div className={"row"}>
+            <div className="col s6 left-align">
+              <Button label={label} clickEvent={this._trackTime} type={type} css={css} disabled={disabled} />
+            </div>
+            <div className="col s6 right-align">
+              <Button label={timePickerLabel} clickEvent={this._pickTime} type={type} css={css} disabled={disabled} />
+            </div>
           </div>
-          <div className="col s6 right-align">
-            <Button label={timePickerLabel} clickEvent={this._pickTime} type={type} css={css} disabled={disabled} />
-          </div>
-        </div>
-        <div className={"row"}>
-          <div className="col s12">
-            <List listItems={this.state.workingTimes} />
-          </div>
-          <div className="col s12 right-align">
-            <Button label={undo} clickEvent={this._undo} />
+          <div className={"row"}>
+            <div className="col s12">
+              <List listItems={this.state.workingTimes} />
+            </div>
+            <div className="col s12 right-align">
+              <Button label={undo} clickEvent={this._undo} />
+            </div>
           </div>
         </div>
       </div>
