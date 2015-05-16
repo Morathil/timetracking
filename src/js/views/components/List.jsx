@@ -39,7 +39,10 @@ var List = React.createClass({
       border: "0px"
     };
 
-    for (var key in content) {
+    var keys = Object.keys(content).reverse();
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
       tmp.push(<ul key={key} className={"collection"} style={noBorder} >
         <li key={key} style={noBorder} className={"collection-item active cyan darken-4"}>
           {moment(content[key][0].formattedTimes[0]).startOf("week").format("MMMM Do YYYY")} - {moment(content[key][0].formattedTimes[0]).endOf("week").format("MMMM Do YYYY")}
